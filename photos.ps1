@@ -30,6 +30,7 @@ $dropbox = "C:\Users\kbuzby\Dropbox\"
 $zDrive = "Z:\Project Photos\"  
 $Inspectors = @()
 $JobFolder = @()
+$CommonName = @()
  
 
 function Release-Ref ($ref) { 
@@ -39,7 +40,7 @@ function Release-Ref ($ref) {
 [System.GC]::WaitForPendingFinalizers() 
 } 
 
-function MoveFiles([string]$source, [string]$target) 
+function MoveFiles([string]$source, [string]$target, [string]$common) 
 {
 	$Files = Get-ChildItem $source -recurse -filter *.jpg
 	if ($Files -ne $null) 
@@ -74,6 +75,7 @@ function MoveFiles([string]$source, [string]$target)
 			Move-Item $file.FullName -destination $TargetPath -force
 		}
 	} 
+	write-host "$common photos updated."
 	}
 }
  
@@ -89,7 +91,8 @@ $i = 1
 Do 	
 { 
 	$Inspectors += $objWorksheet.Cells.Item($i, 2).Value()
-	$JobFolder += $objWorksheet.Cells.Item($i, 3).Value()	
+	$JobFolder += $objWorksheet.Cells.Item($i, 3).Value()
+	$CommonName += $objWorksheet.Cells.Item($i,4).Value()
     $i++ 
 } 
 While ($objWorksheet.Cells.Item($i,2).Value() -ne $null) 
@@ -108,7 +111,12 @@ foreach ($objItem in $Inspectors)
 {
 	$source = ($dropbox + $Inspectors[$i])
 	$target = ($zDrive + $JobFolder[$i])
-	$a = MoveFiles $source $target
+	$common = ($CommonName[$i])
+	$a = MoveFiles $source $target $common
 	$i++
 }
+
+write-host "Photos have been updated, press any key to continue..."
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
 
