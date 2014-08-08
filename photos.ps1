@@ -24,7 +24,7 @@
 #Purpose: How can I use Windows Powershell to Build an Array from a Column of Data in Excel? 
 # ============================================================================================== 
 
-[reflection.assembly]::loadfile( "C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll") 
+$x = [reflection.assembly]::loadfile( "C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll") 
 
 $dropbox = "C:\Users\kbuzby\Dropbox\"
 $zDrive = "Z:\Project Photos\"  
