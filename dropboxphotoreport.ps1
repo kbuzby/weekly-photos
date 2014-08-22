@@ -115,7 +115,9 @@ if ($today.DayOfWeek -eq "Friday")
 	foreach ($Job in $JobsCommon)
 	{
 		$RecentFiles = Get-ChildItem $PhotoFolders[$i] -recurse -filter *.jpg | Where-Object {$_.LastWriteTime -gt $sunday}
-		$RandFiles = $null
+		
+		##Uncomment the below if moving all files doesn't work well
+		<#$RandFiles = $null
 		if ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 19) 
 		{
 			#copy random files to Dave's weekly report, if weekly report folder doesn't exist, create it.
@@ -130,11 +132,11 @@ if ($today.DayOfWeek -eq "Friday")
 		{
 			#copy all recent files to weekly-photos
 			$RandFiles = $RecentFiles
-		}
+		}"#>
 
-		if ($RandFiles -ne $null)
+		if ($RecentFiles -ne $null)
 		{
-			foreach ($file in $RandFiles)
+			foreach ($file in $RecentFiles)
 			{
 				If (Test-Path ($WeeklyPhotoPath+"\"+$Job))
 				{
