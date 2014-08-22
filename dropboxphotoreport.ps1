@@ -9,7 +9,7 @@ function Release-Ref ($ref) {
 [System.GC]::WaitForPendingFinalizers() 
 } 
 
-function MoveFiles([string]$source, [string]$target, [string]$common, [string]$eng) {
+function MoveFiles([string]$source, [string]$target, [string]$common, [string]$engineer) {
 	write-host "Checking for $common photos..."
 	$Files = Get-ChildItem $source -recurse -filter *.jpg
 	if ($Files -ne $null) 
@@ -30,7 +30,7 @@ function MoveFiles([string]$source, [string]$target, [string]$common, [string]$e
 			$strYear = [String]::Join("",$arYear)
 			$strMonth = [String]::Join("",$arMonth) 
 			$strDay = [String]::Join("",$arDay)
-			if ($eng -eq "Jason")
+			if ($engineer -eq "Jason")
 			{
 				$DateTaken = "XX " + $strYear + "." + $strMonth + "." + $strDay
 			}
@@ -103,8 +103,8 @@ foreach ($objItem in $Inspectors)
 	$source = ($dropbox + $Inspectors[$i])
 	$target = ($zDrive + $JobFolder[$i])
 	$common = ($CommonName[$i])
-	$eng = ($Engineer[$i])
-	$a = MoveFiles $source $target $common $eng
+	$engineer = ($Engineer[$i])
+	$a = MoveFiles $source $target $common $engineer
 	$i++
 }
 
