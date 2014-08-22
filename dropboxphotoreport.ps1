@@ -9,7 +9,7 @@ function Release-Ref ($ref) {
 [System.GC]::WaitForPendingFinalizers() 
 } 
 
-function MoveFiles([string]$source, [string]$target, [string]$common) {
+function MoveFiles([string]$source, [string]$target, [string]$common, [string]$engineer) {
 	write-host "Checking for $common photos..."
 	$Files = Get-ChildItem $source -recurse -filter *.jpg
 	if ($Files -ne $null) 
@@ -30,7 +30,11 @@ function MoveFiles([string]$source, [string]$target, [string]$common) {
 			$strYear = [String]::Join("",$arYear)
 			$strMonth = [String]::Join("",$arMonth) 
 			$strDay = [String]::Join("",$arDay)
-			$DateTaken = $strYear + "." + $strMonth + "." + $strDay
+			if ($engineer -eq "Jason")
+			{
+				$DateTaken = "XX " + $strYear + "." + $strMonth + "." + $strDay
+			}
+			else {$DateTaken = $strYear + "." + $strMonth + "." + $strDay}
 			$TargetPath = $target + "\" + $DateTaken
    
 			$foo.dispose()
@@ -54,6 +58,7 @@ function MoveFiles([string]$source, [string]$target, [string]$common) {
 $today = Get-Date 
 $JobsCommon = @()
 $Inspectors = @()
+$Engineer = @()
 $JobFolder = @()
 $CommonName = @()
 $PhotoFolders = @()
@@ -74,6 +79,7 @@ Do
 	$Inspectors += $dropboxSheet.Cells.Item($i, 2).Value()
 	$JobFolder += $dropboxSheet.Cells.Item($i, 3).Value()
 	$CommonName += $dropboxSheet.Cells.Item($i,4).Value()
+	$Engineer += $dropboxSheet.Cells.Item($i, 5).Value()
 	$i++ 
 } While ($dropboxSheet.Cells.Item($i,2).Value() -ne $null) 
 $i = 1 
@@ -97,7 +103,8 @@ foreach ($objItem in $Inspectors)
 	$source = ($dropbox + $Inspectors[$i])
 	$target = ($zDrive + $JobFolder[$i])
 	$common = ($CommonName[$i])
-	$a = MoveFiles $source $target $common
+	$engineer = ($Engineer[$i])
+	$a = MoveFiles $source $target $common $engineer
 	$i++
 }
 
@@ -112,12 +119,12 @@ if ($today.DayOfWeek -eq "Friday")
 		if ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 19) 
 		{
 			#copy random files to Dave's weekly report, if weekly report folder doesn't exist, create it.
-			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 4 -Maximum 20)
+			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 10 -Maximum 20)
 		}
-		elseif ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 4 -and ($RecentFiles | Measure-Object).count -lt 21) 
+		elseif ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 10 -and ($RecentFiles | Measure-Object).count -lt 21) 
 		{
 			#copy random files to Dave's weekly report, if weekly report folder doesn't exist, create it.
-			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 4 -Maximum (($RecentFiles | Measure-Object).count))
+			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 10 -Maximum (($RecentFiles | Measure-Object).count))
 		}
 		elseif ($RecentFiles -ne $null)
 		{
