@@ -103,8 +103,8 @@ foreach ($objItem in $Inspectors)
 	$source = ($dropbox + $Inspectors[$i])
 	$target = ($zDrive + $JobFolder[$i])
 	$common = ($CommonName[$i])
-	$engineer = ($Engineer[$i])
-	$a = MoveFiles $source $target $common $engineer
+	$eng = $Engineer[$i]
+	$a = MoveFiles $source $target $common $eng
 	$i++
 }
 
@@ -154,6 +154,7 @@ if ($today.DayOfWeek -eq "Friday")
 	write-host "Photo report compiled..."
 }
 
+explorer $WeeklyPhotoPath
 	
 write-host "Press any key to continue..."
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
