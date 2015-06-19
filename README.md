@@ -1,6 +1,9 @@
 README
 =============
+Do not run this script unless you have Powershell installed. If you have Windows 7 or greater, you already have this installed. If you do not have Windows 7 or greater, then you must download Powershell; please refer to this article on how to get it: https://support.microsoft.com/en-us/kb/968929
 
-This small script takes photos from my company's dropbox on my local machine and according to file Inspectors.xlsx it takes the files in set project folders, and moves them to our local network photo storage server into folders organized by date.
+Please login to the DCoats account on your version of Dropbox for this to work.
 
-On Friday's I have to compile a photo report for my boss, the script checks if it is Friday, and will get the most recent photos for the last week in each job in Inspector's.xlsx and will take a random amount from each job folder and copy them to a weekly report folder.
+This script takes photos from the DCoats Dropbox folder on your machine and will move them to the Z:/ Drive according the Inspectors.xlsx file located in the Z:/Project Photos folder. It will organize them by date in the Project Photos folder and delete them from the Dropbox.
+
+

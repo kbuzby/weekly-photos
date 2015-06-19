@@ -63,7 +63,7 @@ $JobFolder = @()
 $CommonName = @()
 $PhotoFolders = @()
 $WeeklyPhotoPath = "Z:\Project Photos\Photos for d coats project summary reports\" + $(Get-Date $today -format 'yyyyMMdd') + "_WeeklyPhotos"
-$dropbox = "C:\Users\kbuzby\Dropbox\"
+$dropbox = $env:USERPROFILE+"\Dropbox\"
 $zDrive = "Z:\Project Photos\"  
 
 $objExcel = new-object -comobject excel.application  
@@ -101,7 +101,7 @@ $i = 0
 foreach ($objItem in $Inspectors)
 {
 	$source = ($dropbox + $Inspectors[$i])
-	$target = ($zDrive + $JobFolder[$i])
+	$target = ($JobFolder[$i])
 	$common = ($CommonName[$i])
 	$eng = $Engineer[$i]
 	$a = MoveFiles $source $target $common $eng
@@ -116,24 +116,6 @@ if ($today.DayOfWeek -eq "Friday")
 	{
 		$RecentFiles = Get-ChildItem $PhotoFolders[$i] -recurse -filter *.jpg | Where-Object {$_.LastWriteTime -gt $sunday}
 		
-		##Uncomment the below if moving all files doesn't work well
-		<#$RandFiles = $null
-		if ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 19) 
-		{
-			#copy random files to Dave's weekly report, if weekly report folder doesn't exist, create it.
-			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 10 -Maximum 20)
-		}
-		elseif ($RecentFiles -ne $null -and ($RecentFiles | Measure-Object).count -gt 10 -and ($RecentFiles | Measure-Object).count -lt 21) 
-		{
-			#copy random files to Dave's weekly report, if weekly report folder doesn't exist, create it.
-			$RandFiles = $RecentFiles | Get-Random -Count (Get-Random -Minimum 10 -Maximum (($RecentFiles | Measure-Object).count))
-		}
-		elseif ($RecentFiles -ne $null)
-		{
-			#copy all recent files to weekly-photos
-			$RandFiles = $RecentFiles
-		}"#>
-
 		if ($RecentFiles -ne $null)
 		{
 			foreach ($file in $RecentFiles)
@@ -152,9 +134,10 @@ if ($today.DayOfWeek -eq "Friday")
 		$i++	
 	}
 	write-host "Photo report compiled..."
+	explorer $WeeklyPhotoPath
 }
 
-explorer $WeeklyPhotoPath
+write-host "Photos updated"
 	
 write-host "Press any key to continue..."
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
